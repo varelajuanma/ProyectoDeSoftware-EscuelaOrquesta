@@ -1,0 +1,32 @@
+{% extends 'layout.html' %} {% block title %}Detalles del Docente{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block content %}
+<div class="container">
+    <fieldset>
+        <strong class="text-center">
+            <legend>Datos del Instrumento</legend>
+        </strong>
+        <ul class="list-group col-md-12">
+
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Nombre: </strong>{{instrumento.nombre}}<br><br>
+                        <strong>Tipo de Instrumento: </strong>{{instrumento.tipo}}<br><br>
+                        <strong>Número de Inventario: </strong>{{instrumento.num_inventario}}<br>
+                    </div>
+                    <div class="col-md-6">
+                        <img class="image-size" src="data:image/jpeg;base64,{{imagen}}">
+                    </div>
+                </div>
+                <br>
+
+                <br>
+            </li>
+        </ul>
+        <br>
+        <a class="btn btn-primary" href="{{ url_for('instrumentos_listado') }}" role="button">Volver</a>
+    </fieldset>
+</div>
+{% endblock %}

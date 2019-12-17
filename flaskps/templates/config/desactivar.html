@@ -1,0 +1,10 @@
+{% extends "layout.html" %} {% block title %}Orquesta Escuela de Berisso{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block content %}
+<h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Desactivar Sistema </h1>
+<div class="text-center">
+  <a class="btn btn-primary" href="{{ url_for('user_desactivar') }}"> Aceptar </a>
+  <a class="btn btn-primary" href="{{ url_for('user_volveradmin') }}"> Cancelar </a>
+</div>
+{% endblock %}

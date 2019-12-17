@@ -1,0 +1,30 @@
+{% extends 'layout.html' %} {% block title %}Seccion No admin{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category  }} alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% endblock %}
+{% block content %}
+
+<body>
+  <div class="font-weight-bold text-center ">
+    <p><strong>Docente</strong>, bienvenido a su perfil!</p>
+    {% if session['rol'] == 2 %}
+      <a href="{{url_for('doc_taller', id=  session['user'] ) }}" class="btn btn-primary">Ver mis talleres</a>
+    {% endif %}
+    {{session['rol']}}
+  </div>
+</body>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'layout.html' %} {% block title %}Modulo Ciclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+<link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/estilo.css">
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Administrar Ciclos </h1>
+    {% if session['rol'] == 1 %}
+      <a class="btn btn-primary m-3" href="{{ url_for('new_ciclo') }}">Agregar Ciclo</a>
+    {% endif %}
+    <a class="btn btn-primary m-3" href="{{ url_for('mostrarCiclosPasados') }}">Ciclos Terminados</a>
+  </div>
+</div>
+<div class="mt-3">
+  {% if not ciclos %}
+  <br>
+  <h2 class="text-center"> No existen ciclos creados </h2>
+  <br>
+  {% else %}
+  {% for ciclo in ciclos %}
+ 
+  <div class="titulo">
+    <form action="{{url_for('eliminar_ciclo') }}" method="POST">
+      <input type="hidden" name="id" value="{{ ciclo ['id']}}">
+       {% if session['rol'] == 1 %}
+      <button class="btn btn-danger float-right mt-1 mr-1" type="submit" onclick="return confirm('Estas seguro de borrar este ciclo?. Con él se borraran todos los alumnos,docentes y talleres asociados a este ciclo.')" title="Eliminar Ciclo">
+        <i class="fas fa-trash"></i>
+      </button>
+       {% endif %}
+    </form>
+     {% if session['rol'] == 1 %}
+    <a href="{{ url_for('modificarCiclo', id=ciclo['id']) }}" class="btn btn-primary float-right mt-1 mr-1" title="Modificar Ciclo">
+      <i class="fas fa-edit"></i>
+    </a>
+    {% endif %}
+   
+    <a href="{{ url_for('listar_talleresCiclo', id=ciclo['id']) }}" class="titulo">Ciclo del: {{ ciclo['fecha_ini'].strftime('%d-%m-%Y')}} hasta el: {{ ciclo['fecha_fin'].strftime('%d-%m-%Y')}} </a>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

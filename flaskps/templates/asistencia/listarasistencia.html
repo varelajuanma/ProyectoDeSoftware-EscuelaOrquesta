@@ -1,0 +1,59 @@
+{% extends 'layout.html' %} {% block title %}Listado De Asistencia{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "info": false,
+      "ordering": false,
+      "aLengthMenu": [[5, 10,20], [5, 10,20]],
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+   })
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+
+
+  <h1> Listado De Asistencia </h1>
+  {% if not asistencias %}
+    <br>
+    <h2 class= "text-center"> No hay asistencias anteriores  registradas </h2>
+  {% else %}
+  <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+      <thead>
+        <tr>
+          <td style="text-align:center"><strong> Fecha </strong> </td>
+          <td style="text-align:center"><strong> Taller </strong> </td>
+          <td style="text-align:center"><strong>Estudiantes </strong> </td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for asistencia in asistencias %}
+        <tr>
+          <td >{{asistencia['fecha'].date().strftime('%d-%m-%Y')}}</td>
+          <td style="text-align:center">{{asistencia['nombre']}} </td>
+          <td style="text-align:center"><a class="btn btn-primary m-2 " href="{{ url_for('estu_presente',tallerid= asistencia['taller_id'] ) }}" role="button"> Ver estudiantes</a>  </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+      <a class="btn btn-primary" href="{{url_for('doc_taller', id=  session['user'] ) }}" role="button">Volver</a>
+
+  {% endblock %}

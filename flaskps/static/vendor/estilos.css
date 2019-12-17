@@ -1,0 +1,145 @@
+.contenido {
+  margin : 2%;
+  padding: 1%;
+}
+
+.modal-login {
+  width: 320px;
+}
+
+.modal-login .modal-content {
+  border-radius: 1px;
+  border: none;
+}
+
+.modal-login .modal-header {
+  position: relative;
+  justify-content: center;
+  background: #f2f2f2;
+}
+
+.modal-login .modal-body {
+  padding: 30px;
+}
+
+.modal-login .modal-footer {
+  background: #f2f2f2;
+}
+
+.modal-login h4 {
+  text-align: center;
+  font-size: 26px;
+}
+
+.operaciones{
+  margin-left: 0.5em;
+  padding: 0.5em;
+}
+
+.modal-login label {
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.modal-login .form-control, .modal-login .btn {
+  min-height: 38px;
+  border-radius: 2px;
+}
+
+.modal-login .hint-text {
+  text-align: center;
+}
+
+.modal-login .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.modal-login .checkbox-inline {
+  margin-top: 12px;
+}
+
+.modal-login input[type="checkbox"] {
+  margin-top: 2px;
+}
+
+.modal-login .btn {
+  min-width: 100px;
+  background: #3498db;
+  border: none;
+  line-height: normal;
+}
+
+.modal-login .btn:hover, .modal-login .btn:focus {
+  background: #248bd0;
+}
+
+.modal-login .hint-text a {
+  color: #999;
+}
+
+.alert h5 {
+  color: red;
+  font-size: 1em;
+}
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+footer {
+  background-color: #212529;
+  color: white;
+  position: absolute;
+   bottom: 0;
+   width: 100%;
+   height: 60px;
+}
+.table-responsive-xl{
+  display: table;
+}
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+#content-wrap {
+  padding-bottom: 60px;    /* Footer height */
+}
+#info{
+  font-size: 17px;
+}
+
+div.titulo{
+	width:100%;
+	height:50px;
+	background-color:#5dbfcf;
+	border-bottom: 1px solid white;
+}
+
+a.titulo{
+	color: white;
+}
+
+.boton-borrar{
+  margin:20px;
+}
+.abajo-izquierda{
+  position:absolute;
+bottom:70px;
+left:15px
+}
+.nombre{
+  font-size: 18px;
+  font-family: "Georgia"
+}
+
+#map {
+  height: 800px;
+  width: 10%;
+  box-shadow: 5px 5px 5px #888
+}
+
+.image-size {
+  max-height: 16em;
+  width: auto;
+}

@@ -1,0 +1,136 @@
+{% extends 'layout.html' %} {% block title %}Formulario Estudiante{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-danger" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form form action="{{ url_for('agregar_estudiante') }}" method="POST">
+    <fieldset>
+      <strong>
+        <legend>Agregar Estudiante</legend>
+      </strong>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Apellido</strong></label>
+        <input type="text" class="form-control" name="apellido" placeholder="Ingrese apellido" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Nombre</strong></label>
+        <input type="text" class="form-control" name="nombre" placeholder="Ingrese nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Fecha de Nacimiento</strong></label>
+        <input type="date" class="form-control" name="fecha_nac" max="2015-12-31" min="1920-01-01" placeholder="Fecha" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Lugar de Nacimiento</strong></label>
+        <input type="text" class="form-control" name="lugarnac" placeholder="Ingrese lugar" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Localidad</strong></label>
+        <br>
+        <select name="localidad_id" required>
+          {% for result in aux_localidad %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Domicilio</strong></label>
+        <input type="text" class="form-control" name="domicilio" placeholder="Ingrese domicilio" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Barrio</strong></label>
+        <br>
+        <select name="barrio_id" required>
+          {% for result in barrio %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+         {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Genero</strong></label>
+        <br>
+        <select name="genero_id" required>
+          {% for result in genero %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Tipo de Documento</strong></label>
+        <br>
+        <select name="tipo_doc_id" required>
+          {% for result in aux_tipodoc %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Número de Documento</strong></label>
+        <input type="number" class="form-control" name="numero" placeholder="Ingrese número" required>
+      </div>
+      <!--     <div class="form-group">
+        <label for="exampleNombre">Responsable a cargo</label>
+        <br>
+        <select name="responsableacargo">
+          {% for result in responsableacargo %}
+          <option value="{{result['id']}}">{{result['nombre']}} {{result['apellido']}}</option>
+          {% endfor %}
+        </select>
+      </div> -->
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Teléfono</strong></label>
+        <input type="number" class="form-control" name="tel" placeholder="Ingrese número" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Escuela</strong></label>
+        <br>
+        <select class="" name="escuela_id" required>
+          {% for result in escuela %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Nivel</strong></label>
+        <br>
+        <select class="" name="nivel_id" required >
+          {% for result in nivel %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Email del Responsable</strong></label>
+        <input type="email" class="form-control" name="mailresponsable" placeholder="Ingrse email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Teléfono del Responsable</strong></label>
+        <input type="number" class="form-control" name="numeroresponsable" placeholder="Ingrese número" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Agregar</button>
+      <a class="btn btn-primary" href="{{ url_for('estudiante_listado') }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+</div>
+<br>
+{% endblock %}

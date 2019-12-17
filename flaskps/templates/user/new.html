@@ -1,0 +1,52 @@
+{% extends 'layout.html' %} {% block title %}Registarse{% endblock %}
+{% include "navbar.html" %}
+
+<!-- BLOQUE DE MENSAJE DE ALERT TIPO FLASH -->
+{% block message %}
+{% with messages = get_flashed_messages() %}
+<!-- creo que esto toco juan para e cartelito rojo -->
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-danger" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<br>
+<div class="container">
+  <form action="{{ url_for('user_create') }}" method="POST">
+    <fieldset>
+      <strong><legend>Crear cuenta</legend></strong>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Dirección de email</label>
+        <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Ingrese su email" required>
+        <small id="emailHelp" class="form-text text-muted">Por favor, ingrese un email valido.</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Contraseña</label>
+        <input type="password" minlength="8" class="form-control" name="contraseña" placeholder="Contraseña" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre">Nombre</label>
+        <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre">Apellido</label>
+        <input type="text" class="form-control" name="apellido" placeholder="Apellido" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Registrarme</button>
+    </fieldset>
+  </form>
+</div>
+
+{% endblock %}

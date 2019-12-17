@@ -1,0 +1,94 @@
+{% extends 'layout.html' %} {% block title %}Modulo Docentes{% endblock %}
+{% include "navbarLogueado.html" %}
+
+<!-- BLOQUE DE MENSAJE DE ALERT TIPO FLASH -->
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-danger" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form form action="{{ url_for('docente_alta') }}" method="POST">
+    <fieldset>
+      <br>
+      <strong>
+        <legend>Agregar Docente</legend>
+      </strong>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Apellido</strong></label>
+        <input type="text" class="form-control" name="apellido" placeholder="Ingrese apellido" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Nombre</strong></label>
+        <input type="text" class="form-control" name="nombre" placeholder="Ingrese nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Fecha De Nacimiento</strong></label>
+        <input type="date" class="form-control" name="fecha" max="2015-12-31" min="1920-01-01" placeholder="fecha" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Localidad</strong></label>
+        <br>
+        <select name="localidad">
+          {% for localidad in localidades %}
+
+          <option value="{{localidad['id']}}">{{localidad['nombre']}}</option>
+
+          {% endfor %}
+
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Domicilio</strong></label>
+        <input type="text" class="form-control" name="Domicilio" placeholder="Ingrese domicilio" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Genero</strong></label>
+        <br>
+        <select name="genero">
+          <option value="1">Masculino</option>
+          <option value="2">Femenino</option>
+          <option value="3">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Tipo De Documento</strong></label>
+        <br>
+        <select name="tipodoc">
+          {% for tipo in tiposDocumento %}
+
+          <option value="{{tipo['id']}}">{{tipo['nombre']}}</option>
+
+          {% endfor %}
+
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Numero De Documento</strong></label>
+        <input type="number" class="form-control" name="doc" placeholder="Ingrese número" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Numero De Telefono</strong></label>
+        <input type="number" class="form-control" name="tel" placeholder="Ingrese número" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+      <a class="btn btn-primary" href="{{ url_for('docentes_listado') }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+</div>
+<br>
+
+{% endblock %}

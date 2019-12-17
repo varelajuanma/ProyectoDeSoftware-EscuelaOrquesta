@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Logueado</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  </head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <div style="margin-left: -107px;">
+        <a class="navbar-logo">
+          <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo de la Orquesta" height="100">
+        </a> &nbsp&nbsp
+        <a class="navbar-brand">
+          <p class="text-white">{{titulo}}</p>
+        </a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            {%if session['rol'] == 1%}
+            <a class="nav-link" href="{{ url_for('user_volveradmin') }}">Home</a>
+            {% endif %}
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Operaciones</a>
+            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+             {%if session['rol'] == 1%}
+              <a class="dropdown-item" href="{{ url_for('user_listado') }}">Módulo Usuarios</a>
+              <a class="dropdown-item" href="{{ url_for('docentes_listado') }}">Módulo Docentes</a>
+              <a class="dropdown-item" href="{{ url_for('estudiante_listado') }}">Módulo Estudiantes</a>
+              <a class="dropdown-item" href="{{ url_for('ciclo_list') }}">Módulo Administrar Ciclos</a>
+              <a class="dropdown-item" href="{{ url_for('instrumentos_listado') }}">Módulo Instrumentos</a>
+              <a class="dropdown-item" href="{{ url_for('user_administracion') }}">Configuraciones del Sistema</a>
+              <a class="dropdown-item" href="{{ url_for('mapa') }}">Módulo de Nucleos</a>
+              <div class="dropdown-divider"></div>
+             {% endif %}
+             {%if session['rol'] == 2 %}
+                <a class="dropdown-item" href="{{ url_for('docente_volver') }}">Home</a>
+                <a class="dropdown-item" href="{{ url_for('docentes_listado') }}">Módulo Docentes</a>
+				        <a class="dropdown-item" href="{{ url_for('estudiante_listado') }}">Módulo Estudiantes</a>
+                <a class="dropdown-item" href="{{ url_for('instrumentos_listado') }}">Módulo Instrumentos</a>
+                <a class="dropdown-item" href="{{ url_for('ciclo_list') }}">Módulo Ciclos</a>
+                <div class="dropdown-divider"></div>
+             {% endif %}
+             <a class="dropdown-item" href="{{ url_for('auth_logout') }}">Cerrar Sesion</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</body>
+{% if habilitacion == 0 %}
+<div class="alert alert-warning alert-dismissable text-center">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>¡Cuidado!</strong> El sitio se encuentra Deshabilitado actualmente.
+</div>
+{% endif %}
+<div>
+  <p id="info"> Usted está logueado como: <strong> {{ session['nombre_apellido'] }}</strong> </p>
+</div>
+
+
+</html>
+</DOCTYPE>

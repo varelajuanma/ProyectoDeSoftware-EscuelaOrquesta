@@ -1,0 +1,62 @@
+{% extends 'layout.html' %} {% block title %}Modulo Ciclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+<div class="container">
+  <form form action="{{ url_for('insert_taller_estudiante') }}" method="POST">
+    <fieldset>
+      <strong>
+        <legend> Asignar Estudiante</legend>
+      </strong>
+      <div class="form-group">
+        <select name="idestudiante" required>
+          {% for result in aux %}
+
+          <option value="{{result['id']}}">{{result['nombre']}} {{result['apellido']}} </option>
+
+          {% endfor %}
+
+        </select>
+      </div>
+
+      <input hidden tipe="hidden" name="idciclo" value="{{idciclo[0]['id']}}">
+      <input hidden tipe="hidden" name="idtaller" value="{{idtaller[0]['id']}}">
+
+      <input type="hidden" name="ciclo lectivo" value="{{ciclo}}">
+<!--
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Ciclos-Talleres</strong></label>
+        <br>
+        <select name="ejemplo" required>
+          {% for result in aux2 %}
+          <option value="{{result['id'],result['t.id']}}">{{result['fecha_ini'].strftime('%d-%m-%Y')}} al {{result['fecha_fin'].strftime('%d-%m-%Y')}} -- {{result['semestre']}} -- {{result['nombre_corto']}}</option>
+          {% endfor %}
+        </select>
+        <br><br>
+        <p> <strong>Formato:</strong> Fecha de Inicio -- Fecha de Fin -- Semestre -- Nombre del Taller </p>
+      </div>
+-->
+
+      <button type="submit" class="btn btn-primary">Asignar</button>
+      <a class="btn btn-primary" href="{{ url_for('verUsuarios_taller', id=idtaller[0]['id'],cId=idciclo[0]['id']) }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+
+</div>
+</div>
+{% endblock %}

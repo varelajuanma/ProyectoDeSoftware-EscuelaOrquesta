@@ -1,0 +1,66 @@
+{% extends 'layout.html' %} {% block title %}Configuracion del sistema{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block head %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="contenido">
+
+
+  <h1>
+    <div class="text-center" style="font-family: 'Anton', sans-serif;"> Operaciones de Configuración </div>
+  </h1>
+  <br>
+  <div class="text-center">
+    <form action="{{ url_for('user_administracion_config') }}" method="POST">
+      <h2>Modificación de Título </h2>
+      <textarea type='text' rows="1" cols="60" name="Titulo">{{titulo}}</textarea>
+      <br>
+      <br>
+
+      <h2>Modificación de Descripción </h2>
+      <div class="form-group">
+        <textarea type='text' rows="20" cols="100" name="Descripcion">{{descripcion}}</textarea>
+      </div>
+      <br>
+
+      <h2>Modificación de Email </h2>
+      <input type='email' size="40" rows="10" cols="50" name="Mail" value="{{mail}}"></input>
+      <br>
+      <br>
+
+      <h2>Modificación de cantidad de Usuarios por página</h2>
+      <div class="form-group">
+        <input type='number' name="paginacion" value="{{paginacion}}"> </input>
+      </div>
+      <br>
+
+      <input type="hidden" name="habilitacion" value="{{habilitacion}}">
+      <div class="text-center">
+        {% if habilitacion ==0 %}
+        <a class="btn btn-success" onClick="return confirm('esta seguro que quiere habilitar la pagina')" href="{{ url_for('config_activar') }}"> Habilitar página </a>
+        {% else %}
+        <a class="btn btn-danger" onClick="return confirm('esta seguro que quiere deshabilitar la pagina')" href="{{ url_for('user_desactivar') }}"> Deshabilitar página </a>
+        {% endif %}
+      </div>
+      <br>
+
+      <button class="btn btn-primary" type="submit">Modificar</button>
+      <a class="btn btn-primary" href="{{ url_for('user_volveradmin') }}" role="button">Volver</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

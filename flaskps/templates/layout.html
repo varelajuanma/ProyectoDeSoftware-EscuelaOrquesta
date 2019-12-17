@@ -1,0 +1,77 @@
+<!-- MARCO DE TRABAJO -->
+<!-- CODIGO QUE SE VA A REPETIR EN LAS VISTAS QUE CREEMOS -->
+<!DOCTYPE html>
+<html lang="es"> </html>
+<html>
+
+<head>
+ <title>{% block title %}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Bootstrap core CSS -->
+  <!-- Poniendo Motor de Plantilla -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" />
+  <link rel="stylesheet"
+    href="{{ url_for('static', filename='vendor/font-awesome-4.7.0/css/font-awesome.min.css') }}" />
+  <link href="{{ url_for('static', filename='vendor/estilos.css') }}" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Asap+Condensed&display=swap" rel="stylesheet">
+  <!-- Bootstrap core JavaScript -->
+  <script src="/static/vendor/jquery/jquery.slim.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+  <script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+  <link rel="stylesheet" href="css/font-awesome.css">
+  <link rel="stylesheet" href="css/estilo.css">
+  <!-- Mapa Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+  {% block head %} {% endblock %}
+</head>
+
+<body>
+
+  <div id="page-container">
+
+    <div id="content-wrap">
+      {% block navbar %} {% endblock %}
+
+      <div class="content">
+
+
+          {% block message %}
+          <!-- BLOQUE PARA MENSAJES ALERT TIPO FLASH -->
+          {% endblock %}
+
+
+        {% block content %} {% endblock %}
+
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="copyright text-center my-auto">
+        <div class="footer-copyright my-auto text-center py-3">{% block footer %}© 2019 Copyright{% endblock %}
+          <a href="https://twitter.com/oeberisso?lang=es" target="_blank">
+            <img src="{{ url_for('static', filename='image/twitter.png')}}" alt="Twitter" align="right" height="30" />
+          </a>
+          <a href="https://www.instagram.com/orquesta_escuela_berisso/" target="_blank">
+            <img src="{{ url_for('static', filename='image/instagram.png')}}" alt="Instagram" align="right"
+              height="30" />
+          </a>
+          <a href="https://www.facebook.com/OrquestaEscuelaBerisso/" target="_blank">
+            <img src="{{ url_for('static', filename='image/facebook.png')}}" alt="Facebook" align="right" height="30" />
+          </a>
+        </div>
+      </div>
+    </footer>
+    <!-- Fin Footer -->
+  </div>
+</body>
+
+</html>

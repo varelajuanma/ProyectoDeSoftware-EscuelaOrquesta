@@ -1,0 +1,51 @@
+{% extends 'layout.html' %} {% block title %}Modulo Ciclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+</script>
+
+
+{% endblock %}
+
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>{{ message }}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+  <strong>
+    <legend> Asignar Docente</legend>
+  </strong>
+  <form form action="{{ url_for('insert_taller_docente') }}" method="POST">
+
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <select name="multiselect" multiple required>
+          {% for result in aux %}
+          <option value="{{result['id']}}"> {{result['nombre']}} {{result['apellido']}} </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <br>
+
+    <input hidden tipe="hidden" name="idciclo" value="{{idciclo[0]['id']}}">
+    <input hidden tipe="hidden" name="idtaller" value="{{idtaller[0]['id']}}">
+
+    <button type="submit" class="btn btn-primary">Asignar</button>
+    <a class="btn btn-primary" href="{{ url_for('verUsuarios_taller', id=idtaller[0]['id'],cId=idciclo[0]['id']) }}" role="button">Volver</a>
+  </form>
+
+</div>
+{% endblock %}

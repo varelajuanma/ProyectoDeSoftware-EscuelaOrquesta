@@ -1,0 +1,123 @@
+{% extends 'layout.html' %} {% block title %}Usuarios ciclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "info": false,
+      "aLengthMenu": [
+        [5, 10, 20],
+        [5, 10, 20]
+      ],
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+  })
+</script>
+
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Usuarios del {{ taller[0]['nombre'] }} </h1>
+
+  {% if not cicloTerminado %}
+   {% if session['rol'] == 1 %}
+     <a class="btn btn-primary m-3" href="{{ url_for('new_docente_taller', idciclo=cId, idtaller=id_taller) }}">Asignar Docente</a>
+     <a class="btn btn-primary m-3" href="{{ url_for('new_estudiante_taller', idciclo=cId, idtaller=id_taller) }}">Asignar Estudiante</a>
+   {% endif %}  
+  {% endif %}
+
+  {% if not estudiantes and not docentes  %}
+  <br>
+  <br>
+  <h2 class="text-center"> No hay usuarios en este taller </h2>
+  {% else %}
+  <br>
+  <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+    <thead>
+      <tr>
+        <td>Nombre</td>
+        <td>Apellido</td>
+        <td> Rol </td>
+      {% if session['rol'] == 1 %}
+        <td> Acciones </td>
+      {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for estudiante in estudiantes %}
+      <tr>
+        <td>{{estudiante['nombre']}}</td>
+        <td>{{estudiante['apellido']}} </td>
+        <td> Estudiante </td>
+         {% if session['rol'] == 1 %}
+          <td>
+          <div class="container">
+            <form action="{{url_for('eliminarEstudiante') }}" method="POST">
+              <input type="hidden" name="id" value="{{ estudiante['id'] }}">
+              <input type="hidden" name="idtaller" value="{{ id_taller }}">
+              <input type="hidden" name="idCiclo" value="{{ cId }}">
+              <button class="btn btn-primary float-left m-2" type="submit" onclick="return confirm('Estas seguro de borrar este estudiante?')" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+             {% endif %} 
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+      {% for docente in docentes %}
+      <tr>
+        <td>{{docente['nombre']}}</td>
+        <td>{{docente['apellido']}} </td>
+        <td> Docente </td>
+        {% if session['rol'] == 1 %}
+        <td>
+          <div class="container">
+            <form action="{{ url_for('eliminarDocente') }}" method="POST">
+              <input type="hidden" name="id_docente" value="{{ docente['id'] }}">
+              <input type="hidden" name="idtaller" value="{{ id_taller }}">
+              <input type="hidden" name="idCiclo" value="{{ cId }}">
+              <button class="btn btn-primary float-left m-2" type="submit" onclick="return confirm('Estas seguro de borrar este docente?')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <a class="btn btn-primary" href="{{ url_for('listar_talleresCiclo',id=cId) }}" role="button">Volver</a>
+</div>
+
+
+{% endblock %}

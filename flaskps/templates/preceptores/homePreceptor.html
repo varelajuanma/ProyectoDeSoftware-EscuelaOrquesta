@@ -1,0 +1,115 @@
+{% extends 'layout.html' %} {% block title %}Login Preceptor{% endblock %}
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+<link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/estilo.css">
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "searching": false,
+      "ordering": false,
+      "pageLength": {
+        {
+          paginacion
+        }
+      }, // aca se cambia por la query
+      "bLengthChange": false,
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+  })
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container">
+    <div style="margin-left: -107px;">
+      <a class="navbar-logo">
+        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo de la Orquesta" height="100">
+      </a> &nbsp&nbsp
+      <a class="navbar-brand">
+        <p class="text-white">{{titulo}}</p>
+      </a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Operaciones</a>
+          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+            <a class="dropdown-item" href="{{ url_for('auth_logout') }}">Cerrar Sesion</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="float-right lead font-weight-bold">
+    <p style="font-size: 70%"> Usted está logueado como: {{ session ['user'] }} </p>
+  </div>
+  <br>
+  <div class="font-weight-bold text-center ">
+    <p><strong>Preceptor</strong>, bienvenido a su perfil!</p>
+  </div>
+</div>
+
+<section>
+  <div class="contenido">
+    <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Listado de Estudiantes </h1>
+    <br>
+    <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+      <thead>
+        <tr>
+          <td>Nombre</td>
+          <td>Apellido</td>
+          <td>Numero de Documento</td>
+          <td>Operaciones</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in lista_estud %}
+        {% if result.email != session['user'] %}
+        <tr>
+          <td>{{result.nombre}}</td>
+          <td>{{result.apellido}}</td>
+          <td>{{result.numero}}</td>
+          <td>
+            <div class="container form-inline">
+              <form action="{{url_for('preceptor_datosEstudiante') }}" method="POST">
+                <input type="hidden" name="id" value="{{result.id}}">
+                <button style="margin: 10px" class="btn btn-primary" type="submit" title="Ver mas datos">
+                  <i>Ver mas datos</i>
+                </button>
+              </form>
+              <form action="{{url_for('preceptor_modificarEstudiante') }}" method="POST">
+                <input type="hidden" name="id" value="{{result.id}}">
+                <button style="margin: 10px" class="btn btn-primary" type="submit" title="Modificar">
+                  <i class="fas fa-edit"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

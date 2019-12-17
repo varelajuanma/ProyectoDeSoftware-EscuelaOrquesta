@@ -1,0 +1,118 @@
+{% extends 'layout.html' %} {% block title %}Modulo Estudiante{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+<link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/estilo.css">
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "searching": false,
+      "ordering": false,
+      "pageLength": {{ paginacion }} , // aca se cambia por la query
+      "bLengthChange": false,
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+  })
+</script>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+{% block content %}
+<section>
+  <div class="contenido">
+  <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Listado de Estudiantes </h1>
+  <br>
+  <div class="container">
+    <div class="row justify-content-around">
+      <div class="col">
+        {% if session['rol'] == 1 %}
+        <a class="btn btn-large btn-primary" href="{{ url_for('alta_estudiante') }}">Agregar Estudiante</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+    <thead>
+      <tr>
+        <td><strong>Nombre</strong></td>
+        <td><strong>Apellido</strong></td>
+        <td><strong>Número de Documento</strong></td>
+        <td><strong>Operaciones</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in lista_estud %}
+        {% if result.email != session['user'] %}
+        <tr>
+          <td>{{result.nombre}}</td>
+          <td>{{result.apellido}}</td>
+          <td>{{result.numero}}</td>
+        <td>
+          <div class="container form-inline">
+            <form action="{{url_for('datos_estudiante') }}" method="POST">
+              <input type="hidden" name="id" value="{{result.id}}">
+              <button style="margin: 10px" class="btn btn-primary" type="submit" title="Ver mas datos">
+                <i>Ver mas datos</i>
+              </button>
+            </form>
+
+            <form action="{{url_for('modificar_estudiante') }}" method="POST">
+              <input type="hidden" name="id" value="{{result.id}}">
+              <button style="margin: 10px" class="btn btn-primary" type="submit" title="Modificar">
+                <i class="fas fa-edit"></i>
+              </button>
+            </form>
+
+              {% if session.rol == 1 %}
+                <form action="{{url_for('eliminar_estudiante') }}" method="POST">
+                  <input type="hidden" name="id" value="{{result.id}}">
+                  <button class="btn btn-danger float-right" type="submit" onclick="return confirm('Estas seguro de borrar este elemento?')" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              {% endif %}
+
+          {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if session['rol'] == 1 %}
+  <a class="btn btn-primary" href="{{ url_for('user_volveradmin') }}" role="button">Volver</a>
+  {% endif %}
+   {% if session['rol'] == 2 %}
+     <a class="btn btn-primary" href="{{ url_for('docente_volver') }}" role="button">Volver</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'layout.html' %} {% block title %}Modulo Usuarios{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "searching": false,
+      "ordering": false,
+      "pageLength": {{ paginacion }} , // aca se cambia por la query
+      "bLengthChange": false,
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+  })
+</script>
+{% endblock %}
+
+<!-- BLOQUE DE MENSAJE DE ALERT TIPO FLASH -->
+{% block message %} {% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-success" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %} {% endwith %} {% endblock %}
+
+{% block content %}
+<section>
+  <div class="contenido">
+  <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Listado de Usuarios </h1>
+  <br>
+  <div class="container">
+    <div class="row justify-content-around">
+      <div class="col">
+        <a class="btn btn-large btn-primary" href="{{ url_for('alta_usuario') }}">Agregar Usuario</a>
+      </div>
+      <form action="{{ url_for('user_search') }}" method="POST">
+        <div class="col">
+          <input type="text" class="col-md-4" name="email_est" placeholder="Ingrese búsqueda">
+          <button type="submit" class="btn btn-primary" title="Buscar">
+            <i class="fa fa-search"></i>
+          </button>
+          <a class="btn btn-info" href="{{ url_for('user_search_dislocked') }}">Usuarios Activos</a> <!-- estos deberia estar como un filtro en la misma tabla -->
+          <a class="btn btn-info" href="{{ url_for('user_search_locked') }}">Usuarios Bloqueados</a> <!-- estos deberia estar como un filtro en la misma tabla -->
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+  <br>
+  <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+    <thead>
+      <tr>
+        <td><strong>Nombre</strong></td>
+        <td><strong>Apellido</strong></td>
+        <td><strong>Email</strong></td>
+        <td><strong>Estado</strong></td>
+        <td><strong>Operaciones</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in pat2 %}
+        {% if result.email != session['user'] %}
+        <tr>
+          <td>{{result.nombre}}</td>
+          <td>{{result.apellido}}</td>
+          <td>{{result.email}}</td>
+          {% if result.activo == 0 %}
+          <td> Bloqueado </td>
+          {% else %}
+          <td> Activo </td>
+          {% endif %}
+        <td>
+          <div class="container form-inline">
+            <form action="{{url_for('cambiar_usuario') }}" method="POST">
+              <input type="hidden" name="id" value="{{result.id}}">
+              <button style="margin: 10px" class="btn btn-primary" type="submit" title="Modificar">
+                <i class="fas fa-edit"></i>
+              </button>
+            </form>
+            {% if result.rol != 1 %}
+            <form action="{{url_for('eliminar_usuario') }}" method="POST">
+              <input type="hidden" name="id" value="{{result.id}}">
+              <button class="btn btn-danger float-right" type="submit" onclick="return confirm('Estas seguro de borrar este elemento?')" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+            {% endif %}
+            {% if result.activo == 1 %}
+            <form action="{{url_for('bloquear_usuario') }}" method="POST">
+              <input type="hidden" name="id" value="{{result.id}}">
+              <button id=bloquear style="margin: 10px" class="btn btn-primary" type="submit" title="Bloquear">
+                <i class="fa fa-times-circle"></i>
+              </button>
+            </form>
+            {% else %}
+            <form action="{{url_for('desbloquear_usuario') }}" method="POST">
+              <input type="hidden" name="id" value="{{result.id}}">
+              <button style="margin: 10px" class="btn btn-primary" type="submit" title="Desbloquear">
+                <i class="fa fa-check-circle"></i>
+              </button>
+            </form>
+            {% endif %}
+          {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+    <a class="btn btn-primary" href="{{ url_for('user_volveradmin') }}" role="button">Volver</a>
+  </div>
+</section>
+
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'layout.html' %} {% block title %}Modicar dia-Lugar{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block head %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form form action="{{url_for('agregarDia_lugar')}}" method="POST">
+    <input type="hidden" name="taller_id" value="{{ taller_id }}">
+    <input type="hidden" name="ciclo_id" value="{{ ciclo_id }}">
+    <fieldset>
+      <strong><legend>Asignar Núcleo</legend></strong>
+      <div class="form-group">
+        <select name="idnucleo" required>
+          {% for nucleo in nucleos %}
+            <option value="{{nucleo['id']}}"> {{ nucleo['nombre']}} </option>
+          {% endfor %}
+        </select>
+      </div>
+      <strong><legend>Asignar Día de la Semana </legend></strong>
+      <div class="form-group">
+        <select name="idDia" required>
+          {% for dia in dias %}
+            <option value="{{dia['id']}}"> {{ dia['nombre']}} </option>
+          {% endfor %}
+        </select>
+      </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Agregar </button>
+    <a class="btn btn-primary" href ="{{ url_for ('LugaresYdias', id = taller_id,cicloId= ciclo_id) }}" role="button">Volver</a>
+  </form>
+</div>
+<br>
+{% endblock %}

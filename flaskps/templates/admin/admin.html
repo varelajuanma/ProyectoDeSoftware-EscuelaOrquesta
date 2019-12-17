@@ -1,0 +1,29 @@
+{% extends 'layout.html' %} {% block title %}Administrador{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block message %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+  <h1 class="mt-0">
+    <div class="text-sm-center" style="font-family: 'Anton', sans-serif;">
+      Bienvenido a la pagina del administrador
+    </div>
+  </h1>
+  <img class="imageadministrador img-fluid " src="{{ url_for('static', filename='image/directoradministrador1.jpg') }}"  alt="directoradministrador">
+</div>
+{% endblock %}

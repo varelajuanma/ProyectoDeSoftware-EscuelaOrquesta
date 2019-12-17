@@ -1,0 +1,495 @@
+{% extends 'layout.html' %} {% block title %}Mapa-Nucleo{% endblock %}
+{%if session['rol'] == 1%}
+	{% include "navbarLogueado.html" %}
+{% else %}
+	{% include "navbar.html" %}
+{% endif %}
+
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+<link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/estilo.css">
+<!-- Plugins Mapa Leaflet Routing Machine -->
+<script src="static/vendor/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+<script src="static/vendor/leaflet-routing-machine-3.2.12/examples/Control.Geocoder.js"></script>
+<link rel="stylesheet" href="static/vendor/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css" />
+{% endblock %}
+
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-success" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div style="padding: 1%; margin: %">
+	<div class="container">
+		<div class="text-sm-center" style="font-family: 'Anton', sans-serif;">
+			<h1>Nucleos</h1>
+		</div>
+		<a href="#nucleosModal" class="btn btn-primary m-3" data-toggle="modal">Listado de nucleos</a>
+		{%if session['rol'] == 1%}
+		<a class="btn btn-large btn-primary" href="{{ url_for('alta_nucleo') }}">Agregar nucleo</a>
+		{% endif %}
+	</div>
+	<div id="map" style="height: 700px; width: 100%"></div>
+</div>
+
+<div id="nucleosModal" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times</button>
+			</div>
+			<div class="modal-body">
+				<table id="" class='w-100 table-striped table-bordered bg-white '>
+					<thead>
+						<tr>
+							<td><strong>Lugar</strong></td>
+							<td><strong>Dirección</strong></td>
+							<td><strong>Teléfono</strong></td>
+							{%if session['rol'] == 1%}
+							<td><strong>Operaciones</strong></td>
+							{% endif %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for nucleo in listaDeNucleos %}
+						<tr>
+							<td>{{nucleo.nombre}}</td>
+							<td>{{nucleo.direccion}}</td>
+							<td>{{nucleo.telefono}}</td>
+							{%if session['rol'] == 1%}
+							<td>
+								<div class="container form-inline">
+									<form action="{{url_for('modificar_nucleo') }}" method="POST">
+										<input type="hidden" name="id" value="{{nucleo.id}}">
+										<button style="margin: 10px" class="btn btn-primary" type="submit" title="Modificar">
+											<i class="fas fa-edit"></i>
+										</button>
+									</form>
+									<form action="{{url_for('eliminar_nucleo') }}" method="POST">
+										<input type="hidden" name="id" value="{{nucleo.id}}">
+										<button class="btn btn-danger float-right" type="submit" onclick="return confirm('Estas seguro de borrar este elemento?')" title="Eliminar">
+											<i class="fas fa-trash"></i>
+										</button>
+									</form>
+								</div>
+							</td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	let map = L.map('map').setView([-34.9190, -57.8887], 13);
+
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+	}).addTo(map);
+
+	L.control.scale().addTo(map);
+
+	var myIcon = L.icon({
+    iconUrl: 'static/image/ubicacion.png',
+    iconSize: [40, 40],
+	});
+
+{% for nucleo in listaDeNucleos %}
+	var nucleos = L.marker([{{nucleo.latitud}}, {{nucleo.longitud}}], {icon: myIcon})
+	nucleos.addTo(map)
+	nucleos.bindPopup('<strong>{{nucleo.nombre}}</strong><br> {{nucleo.telefono}}')
+{% endfor %}
+
+	var micro202A = [
+    [-34.90178,-57.95367],
+    [-34.90368,-57.95576],
+    [-34.90992,-57.95538],
+		[-34.90999,-57.95569],
+		[-34.91012,-57.95594],
+		[-34.91019,-57.95603],
+		[-34.91042,-57.95614],
+		[-34.91091,-57.95621],
+		[-34.91123,-57.95597],
+		[-34.91131,-57.95586],
+		[-34.91150,-57.95529],
+		[-34.91150,-57.95519],
+		[-34.91126,-57.95461],
+		[-34.92028,-57.94246],
+		[-34.92046,-57.94237],
+		[-34.92080,-57.94252],
+		[-34.92107,-57.94250],
+		[-34.92139,-57.94232],
+		[-34.92165,-57.94174],
+		[-34.92150,-57.94103],
+		[-34.92133,-57.94078],
+		[-34.92076,-57.94063],
+		[-34.92037,-57.94086],
+		[-34.92023,-57.94078],
+		[-34.90861,-57.92803],
+		[-34.90799,-57.92702],
+		[-34.90783,-57.92662],
+		[-34.90753,-57.92655],
+		[-34.90734,-57.92664],
+		[-34.90185,-57.92279],
+		[-34.90148,-57.92227],
+		[-34.90127,-57.92215],
+		[-34.88455,-57.90387],
+		[-34.88436,-57.90346],
+		[-34.88429,-57.90309],
+		[-34.88426,-57.90270],
+		[-34.88437,-57.90140],
+		[-34.88439,-57.90089],
+		[-34.88438,-57.90073],
+		[-34.88433,-57.90061],
+		[-34.87627,-57.89404],
+		[-34.87615,-57.89399],
+		[-34.86696,-57.88659],
+		[-34.87034,-57.88065],
+		[-34.87062,-57.88008],
+		[-34.87085,-57.87941],
+		[-34.87131,-57.87812],
+		[-34.87302,-57.87195],
+		[-34.87302,-57.87195],
+		[-34.87645,-57.85972],
+		[-34.87413,-57.85786],
+		[-34.87477,-57.85676],
+		[-34.87509,-57.85702],
+		[-34.87598,-57.85538],
+		[-34.87560,-57.85508],
+		[-34.87552,-57.85503],
+		[-34.87552,-57.85504],
+		[-34.87505,-57.85463],
+		[-34.87656,-57.85192],
+		[-34.87665,-57.85187],
+		[-34.87719,-57.85234],
+		[-34.87769,-57.85275],
+		[-34.87792,-57.85189],
+		[-34.87889,-57.84895],
+		[-34.88653,-57.83586],
+		[-34.89119,-57.82332],
+		[-34.89583,-57.81602],
+		[-34.89656,-57.81513],
+		[-34.89691,-57.81450],
+		[-34.89715,-57.81354],
+		[-34.89772,-57.81032],
+		[-34.89795,-57.80943],
+		[-34.90397,-57.79683],
+		];
+	L.polyline(micro202A, {color: 'red'}).bindPopup('<strong>Micro 202A</strong><br>Desde: Est. La Plata<br>Hasta: Los Talas').addTo(map);
+
+	var micro214A = [
+    [-34.95918,-57.99624],
+    [-34.96435,-57.98929],
+    [-34.95782,-57.98207],
+		[-34.95768,-57.98202],
+		[-34.95397,-57.97799],
+		[-34.94932,-57.97285],
+		[-34.95108,-57.97048],
+		[-34.94555,-57.96441],
+		[-34.94369,-57.96696],
+		[-34.94350,-57.96717],
+		[-34.94342,-57.96723],
+		[-34.94328,-57.96724],
+		[-34.94314,-57.96721],
+		[-34.94295,-57.96721],
+		[-34.94279,-57.96727],
+		[-34.94264,-57.96738],
+		[-34.94000,-57.97101],
+		[-34.93972,-57.97178],
+		[-34.93957,-57.97178],
+		[-34.93945,-57.97166],
+		[-34.93941,-57.97151],
+		[-34.94099,-57.96936],
+		[-34.92724,-57.95428],
+		[-34.92330,-57.95453],
+		[-34.92315,-57.95456],
+		[-34.92297,-57.95482],
+		[-34.92283,-57.95489],
+		[-34.92265,-57.95491],
+		[-34.92249,-57.95496],
+		[-34.92240,-57.95500],
+		[-34.92196,-57.95557],
+		[-34.92186,-57.95597],
+		[-34.92184,-57.95626],
+		[-34.92178,-57.95643],
+		[-34.92166,-57.95659],
+		[-34.92155,-57.95667],
+		[-34.92142,-57.95669],
+		[-34.92131,-57.95669],
+		[-34.92119,-57.95665],
+		[-34.91988,-57.95522],
+		[-34.91974,-57.95484],
+		[-34.91977,-57.95445],
+		[-34.92129,-57.95240],
+		[-34.92121,-57.95073],
+		[-34.91732,-57.94645],
+		[-34.91126,-57.95461],
+		[-34.91141,-57.95488],
+		[-34.91150,-57.95519],
+		[-34.91150,-57.95529],
+		[-34.91141,-57.95564],
+		[-34.91131,-57.95586],
+		[-34.91123,-57.95597],
+		[-34.91091,-57.95621],
+		[-34.91063,-57.95620],
+		[-34.91042,-57.95614],
+		[-34.91019,-57.95603],
+		[-34.91012,-57.95594],
+		[-34.90999,-57.95569],
+		[-34.90992,-57.95538],
+		[-34.90992,-57.95525],
+		[-34.90997,-57.95498],
+		[-34.91009,-57.95470],
+		[-34.90508,-57.94918],
+		[-34.90546,-57.94867],
+		[-34.90553,-57.94849],
+		[-34.90598,-57.94789],
+		[-34.90599,-57.94779],
+		[-34.90911,-57.94361],
+		[-34.90924,-57.94356],
+		[-34.91444,-57.93660],
+		[-34.91445,-57.93647],
+		[-34.91521,-57.93544],
+		[-34.91470,-57.92252],
+		[-34.91457,-57.92237],
+		[-34.91448,-57.92219],
+		[-34.91244,-57.91995],
+		[-34.91157,-57.92117],
+		[-34.91030,-57.92274],
+		[-34.90878,-57.92481],
+		[-34.90801,-57.92593],
+		[-34.90792,-57.92621],
+		[-34.90786,-57.92651],
+		[-34.90789,-57.92672],
+		[-34.90796,-57.92688],
+		[-34.90799,-57.92703],
+		[-34.90798,-57.92719],
+		[-34.90792,-57.92731],
+		[-34.90784,-57.92740],
+		[-34.90773,-57.92746],
+		[-34.90754,-57.92744],
+		[-34.90738,-57.92738],
+		[-34.90731,-57.92730],
+		[-34.90723,-57.92713],
+		[-34.90721,-57.92703],
+		[-34.90722,-57.92688],
+		[-34.90721,-57.92680],
+		[-34.90718,-57.92675],
+		[-34.90173,-57.92288],
+		[-34.90148,-57.92274],
+		[-34.90130,-57.92271],
+		[-34.90121,-57.92261],
+		[-34.90114,-57.92251],
+		[-34.90111,-57.92244],
+		[-34.90109,-57.92232],
+		[-34.90097,-57.92213],
+		[-34.88449,-57.90406],
+		[-34.88422,-57.90383],
+		[-34.88413,-57.90378],
+		[-34.88403,-57.90368],
+		[-34.88400,-57.90361],
+		[-34.88399,-57.90349],
+		[-34.88402,-57.90338],
+		[-34.88408,-57.90333],
+		[-34.88412,-57.90331],
+		[-34.88424,-57.90334],
+		[-34.88437,-57.90346],
+		[-34.88455,-57.90387],
+		[-34.88700,-57.90656],
+		[-34.88887,-57.90325],
+		[-34.88357,-57.89893],
+		[-34.88522,-57.89598],
+		[-34.86911,-57.88284],
+		[-34.86669,-57.88708],
+		[-34.86661,-57.88730],
+		[-34.86490,-57.89195],
+		[-34.85650,-57.88755],
+		];
+	L.polyline(micro214A, {color: 'blue'}).bindPopup('<strong>Micro 214A</strong><br>Desde: Berisso<br>Hasta: Los Hornos').addTo(map);
+
+	var micro202A = [
+    [-34.90441,-57.95004],
+    [-34.90595,-57.94795],
+    [-34.90690,-57.94899],
+		[-34.90436,-57.95243],
+		[-34.90897,-57.95749],
+		[-34.91015,-57.95598],
+		[-34.90999,-57.95567],
+		[-34.90992,-57.95530],
+		[-34.90997,-57.95497],
+		[-34.91013,-57.95465],
+		[-34.91040,-57.95441],
+		[-34.91071,-57.95435],
+		[-34.91118,-57.95453],
+		[-34.92031,-57.94223],
+		[-34.92012,-57.94166],
+		[-34.92028,-57.94095],
+		[-34.92053,-57.94072],
+		[-34.92086,-57.94061],
+		[-34.92138,-57.94080],
+		[-34.92552,-57.93524],
+		[-34.92514,-57.93478],
+		[-34.92595,-57.93373],
+		[-34.92634,-57.93415],
+		[-34.93097,-57.92789],
+		[-34.93053,-57.92739],
+		[-34.93060,-57.92702],
+		[-34.93091,-57.92689],
+		[-34.93137,-57.92736],
+		[-34.94385,-57.91049],
+		[-34.94354,-57.91015],
+		[-34.94354,-57.90985],
+		[-34.94377,-57.90981],
+		[-34.94458,-57.91067],
+		[-34.94836,-57.90566],
+		[-34.93446,-57.89046],
+		[-34.93479,-57.89001],
+		[-34.93479,-57.89001],
+		[-34.93336,-57.88425],
+		[-34.93534,-57.87880],
+		[-34.93182,-57.87546],
+		[-34.92710,-57.88272],
+		[-34.92920,-57.88474],
+		[-34.92573,-57.89021],
+		[-34.93092,-57.89488],
+		[-34.93027,-57.89649],
+		[-34.92919,-57.89788],
+		[-34.92898,-57.89880],
+		[-34.92862,-57.89920],
+		[-34.92839,-57.89924],
+		[-34.92798,-57.89954],
+		[-34.92405,-57.90475],
+		[-34.92366,-57.90496],
+		[-34.90799,-57.92600],
+		[-34.90788,-57.92663],
+		[-34.90799,-57.92714],
+		[-34.90774,-57.92746],
+		[-34.90734,-57.92734],
+		[-34.90722,-57.92683],
+		[-34.90702,-57.92659],
+		[-34.90172,-57.92287],
+		[-34.90131,-57.92270],
+		[-34.90110,-57.92233],
+		[-34.90084,-57.92196],
+		[-34.88449,-57.90405],
+		[-34.88408,-57.90373],
+		[-34.88382,-57.90332],
+		[-34.88296,-57.90248],
+		[-34.88040,-57.89962],
+		[-34.87604,-57.89603],
+		[-34.87570,-57.89593],
+		[-34.87550,-57.89596],
+		[-34.87535,-57.89575],
+		[-34.87528,-57.89529],
+		[-34.87518,-57.89517],
+		[-34.87214,-57.89351],
+		[-34.87138,-57.89287],
+		[-34.86576,-57.88997],
+		[-34.86563,-57.88997],
+		[-34.86553,-57.88992],
+		[-34.86655,-57.88721],
+		[-34.86670,-57.88707],
+		[-34.87034,-57.88064],
+		[-34.87063,-57.88006],
+		[-34.87131,-57.87811],
+		[-34.87205,-57.87558],
+		[-34.87544,-57.87837],
+		[-34.88045,-57.86947],
+		[-34.88076,-57.86972],
+		[-34.88324,-57.86534],
+		[-34.87645,-57.85973],
+		[-34.87691,-57.85788],
+		[-34.87770,-57.85275],
+		[-34.87890,-57.84893],
+		[-34.88654,-57.83586],
+		[-34.88777,-57.83255],
+		];
+	L.polyline(micro202A, {color: 'green'}).bindPopup('<strong>Micro 202 Barrio El Carmen</strong><br>Desde: Villa Zula<br>Hasta: Est. La Plata').addTo(map);
+
+	function button(label, container) {
+		var btn = L.DomUtil.create('button', '', container);
+		btn.setAttribute('type', 'button');
+		btn.innerHTML = label;
+		return btn;
+	}
+
+	var control = L.Routing.control({
+			language: 'es',
+			routeWhileDragging: true,
+			plan: new(L.Routing.Plan.extend({
+				createGeocoders: function() {
+					var container = L.Routing.Plan.prototype.createGeocoders.call(this),
+						reverseButton = button('&#8593;&#8595;', container);
+
+					L.DomEvent.on(reverseButton, 'click', function() {
+						var waypoints = this.getWaypoints();
+						this.setWaypoints(waypoints.reverse());
+					}, this);
+
+					return container;
+				}
+			}))([
+				L.latLng(),
+				L.latLng()
+			], {
+				geocoder: L.Control.Geocoder.nominatim(),
+				routeWhileDragging: true,
+				language: 'es',
+			})
+		})
+		.on('routingerror', function(e) {
+			try {
+				map.getCenter();
+			} catch (e) {
+				map.fitBounds(L.latLngBounds(control.getWaypoints().map(function(wp) {
+					return wp.latLng;
+				})));
+			}
+
+			handleError(e);
+		})
+		.addTo(map);
+
+	map.on('click', function(e) {
+		var container = L.DomUtil.create('div'),
+			startBtn = button('Desde aquí', container),
+			destBtn = button('Hasta aquí', container);
+
+		L.DomEvent.on(startBtn, 'click', function() {
+			control.spliceWaypoints(0, 1, e.latlng);
+			map.closePopup();
+		});
+
+		L.DomEvent.on(destBtn, 'click', function() {
+			control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
+			map.closePopup();
+		});
+
+		L.popup()
+			.setContent(container)
+			.setLatLng(e.latlng)
+			.openOn(map);
+	});
+
+	L.Routing.errorControl(control).addTo(map);
+</script>
+
+{% endblock %}

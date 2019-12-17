@@ -1,0 +1,94 @@
+{% extends 'layout.html' %} {% block title %}talleresCiclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "info": false,
+      "ordering": false,
+      "aLengthMenu": [[5, 10,20], [5, 10,20]],
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+  })
+</script>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% endblock %}
+{% block content %}
+<div class="container">
+
+  <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Talleres con fecha de inicio: {{ datos[0]['fecha_ini'].strftime('%d-%m-%Y') }} y fecha fin: {{datos[0]['fecha_fin'].strftime('%d-%m-%Y')}} </h1>
+  {% if not cicloTerminado %}
+   {% if session['rol'] == 1 %}
+      <a class="btn btn-primary m-3" href="{{ url_for('new_taller_ciclo', idciclo=datos[0]['id']) }}">Agregar Taller</a>
+    {% endif %}
+  {% endif %}
+  {% if not talleres %}
+    <br>
+    <br>
+    <h2 class="text-center"> No hay talleres en este ciclo </h2>
+    <br>
+  {% else %}
+    <br>
+    <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+      <thead>
+        <tr>
+          <td style="text-align:center"><strong> Nombre </strong> </td>
+          <td style="text-align:center"><strong> Acciones </strong></td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for taller in talleres %}
+        <tr>
+          <td class="nombre">{{taller['nombre']}}</td>
+          <td>
+            <div class="container text-center">
+              <form action="{{ url_for('borrar_taller') }}" method="POST">
+                <a class="btn btn-primary m-3" href=" {{ url_for ('LugaresYdias', id = taller['id'],cicloId= datos[0]['id'])}}">Ver lugares y dias</a>
+                <a href="{{ url_for('verUsuarios_taller', id=taller['id'],cId=datos[0]['id']) }}" class="btn m-2 btn-primary "> Administrar  </a>
+                <input type="hidden" name="cicloid" value="{{ datos[0]['id'] }}">
+                <input type="hidden" name="tallerid" value="{{ taller['id']}}">
+                {% if session['rol'] == 1 %}
+                <button class="btn btn-danger  m-2 " type="submit" onclick="return confirm('Estas seguro de borrar este taller? Con él se borraran los estudiantes y docentes')" title="Eliminar ciclo">
+                  <i class="fas fa-trash"></i>
+                </button>
+                {% endif %}
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  <a class="btn btn-primary" href="{{ url_for('volverTalleresCiclo', id=datos[0]['id']) }}" role="button">Volver</a>
+  <br>
+  <br>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'layout.html' %} {% block title %}Detalles del Docente{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block content %}
+<div class="container">
+  <fieldset>
+    <strong>
+      <legend>Datos del Docente</legend>
+    </strong>
+    <ul class="list-group col-md-12">
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-md-6"><strong>Apellido: </strong>{{docente.apellido}}</div>
+          <div class="col-md-6"><strong>Nombre: </strong>{{docente.nombre}}</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6"><strong>Localidad: </strong>{{localidad}}</div>
+          <div class="col-md-6"><strong>Domicilio: </strong>{{docente.domicilio}}</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6"><strong>Género: </strong>{{docente.genero}}</div>
+          <div class="col-md-6"><strong>Fecha de Nacimiento:
+            </strong>{{docente.fecha_nac.strftime('%d-%m-%Y')}}</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6"><strong>Tipo de documento: </strong>{{tipoDocumento}}</div>
+          <div class="col-md-6"><strong>Número de documento: </strong>{{docente.numero}}</div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6"><strong>Teléfono: </strong>{{docente.tel}}</div>
+        </div>
+      </li>
+    </ul>
+    <br>
+    <a class="btn btn-primary" href="{{ url_for('docentes_listado') }}" role="button">Volver</a>
+  </fieldset>
+</div>
+{% endblock %}

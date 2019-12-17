@@ -1,0 +1,80 @@
+{% extends 'layout.html' %} {% block title %}Formulario de Modificación de Instrumento{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-danger" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form class="col-md-6" action="{{url_for('guardarModificacionInstrumento') }}" method="POST">
+    <fieldset>
+      <strong>
+        <legend>Modificar Instrumento</legend>
+      </strong>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Nombre</strong></label>
+        <input type="text" class="form-control" name="nombre" value="{{instrumentoUpdate['nombre']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Tipo de Instrumento</strong></label>
+        <br>
+        <select name="tipo_id" required>
+          {% for result in tipo %}
+          {% if result['id']  == instrumentoUpdate['tipo_id'] %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+          {% else %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Numero de Inventario</strong></label>
+        <input type="text" class="form-control" name="num_inventario" value="{{instrumentoUpdate['num_inventario']}}"
+          required>
+      </div>
+
+
+      <img class="image-size" src="data:image/jpeg;base64,{{imagen}}">
+
+      <br>
+
+      <!-- <input accept="image/*" type="file" name="imagen" id="imagen"> -->
+
+      <input type="hidden" name="id" value="{{instrumentoUpdate['id']}}">
+
+      <button type="submit" class="btn btn-primary">Modificar</button>
+      <a class="btn btn-primary" href="{{ url_for('instrumentos_listado') }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+ 
+    <div class="col-md-6">
+      <div class="text-right">
+        <form action="{{ url_for('cambiar_foto') }}" method="POST">
+          <input type="hidden" name="id" value="{{instrumentoUpdate['id']}}">
+          <button type="submit" class="btn btn-secondary">Cambiar Foto</button>
+        </form>
+      </div>
+    </div>
+ 
+
+</div>
+<br>
+{% endblock %}

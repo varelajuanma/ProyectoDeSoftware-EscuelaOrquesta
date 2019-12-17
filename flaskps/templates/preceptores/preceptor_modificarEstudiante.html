@@ -1,0 +1,174 @@
+{% extends 'layout.html' %} {% block title %}Preceptor - Modificación de Estudiante{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container">
+    <div style="margin-left: -107px;">
+      <a class="navbar-logo">
+        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo de la Orquesta" height="100">
+      </a> &nbsp&nbsp
+      <a class="navbar-brand">
+        <p class="text-white">{{titulo}}</p>
+      </a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Operaciones</a>
+          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+            <a class="dropdown-item" href="{{ url_for('auth_logout') }}">Cerrar Sesion</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <form form action="{{url_for('guardarModificacionesEstudiante') }}" method="POST">
+    <fieldset>
+      <strong>
+        <legend>Modificar Estudiante</legend>
+      </strong>
+      <div class="form-group">
+        <label for="exampleInputEmail1"><strong>Apellido</strong></label>
+        <input type="text" class="form-control" name="apellido" aria-describedby="emailHelp" value="{{estudianteUpdate[0]['apellido']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Nombre</strong></label>
+        <input type="text" class="form-control" name="nombre" value="{{estudianteUpdate[0]['nombre']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Fecha de Nacimiento</strong></label>
+        <input type="date" class="form-control" name="fecha_nac" value="{{estudianteUpdate[0]['fecha_nac']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Lugar de Nacimiento</strong></label>
+        <input type="text" class="form-control" name="lugarnac" value="{{estudianteUpdate[0]['lugarnac']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre">Localidad</label>
+        <br>
+        <select name="localidad_id" required>
+          {% for result in aux_localidad %}
+          {% if result['id']  == idlocalidad %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+
+          {% else %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Nivel</strong></label>
+        <br>
+        <select class="" name="nivel_id" required>
+          {% for result in nivel %}
+          {% if result['id']  == idnivel %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+          {% else  %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Domicilio</strong></label>
+        <input type="text" class="form-control" name="domicilio" value="{{estudianteUpdate[0]['domicilio']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Genero</strong></label>
+        <br>
+        <select name="genero_id" required>
+          {% for result in genero %}
+          {% if result['id']  == idgenero %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+          {% else %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Escuela</strong></label>
+        <br>
+        <select class="" name="escuela_id" required>
+          {% for result in escuela %}
+          {% if result['id']  == idescuela %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+          {% else  %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Tipo de Documento</strong></label>
+        <br>
+        <select name="tipo_doc_id" required>
+          {% for result in aux_tipodoc %}
+          {% if result['id']  == idtipodoc %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+          {% else  %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Numero de Documento</strong></label>
+        <input type="number" class="form-control" name="numero" value="{{estudianteUpdate[0]['numero']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Teléfono</strong></label>
+        <input type="number" class="form-control" name="tel" value="{{estudianteUpdate[0]['tel']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Barrio</strong></label>
+        <br>
+
+        <select name="barrio_id" required>
+          {% for result in barrio %}
+          {% if result['id']  == idbarrio %}
+          <option value="{{result['id']}}" selected>{{result['nombre']}}</option>
+          {% else  %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endif  %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Mail De Responsable</strong></label>
+        <input type="email" class="form-control" name="mailresponsable" value="{{estudianteUpdate[0]['mailresponsable']}}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>Numero De Responsable</strong></label>
+        <input type="number" class="form-control" name="numeroresponsable" value="{{estudianteUpdate[0]['numeroresponsable']}}" required>
+      </div>
+
+      <input type="hidden" name="id" value="{{estudianteUpdate[0]['id']}}">
+      <button type="submit" class="btn btn-primary">Modificar</button>
+      <a class="btn btn-primary" href="{{url_for('listarEstudiantesParaPreceptor') }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+</div>
+<br>
+{% endblock %}

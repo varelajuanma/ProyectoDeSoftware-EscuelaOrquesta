@@ -1,0 +1,67 @@
+{% extends 'layout.html' %} {% block title %}ciclos Pasados{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#pagina').dataTable(
+{
+    "iDisplayLength": 5,
+    "info":false,
+    "ordering":false,
+    "aLengthMenu": [[5, 10], [5, 10]],
+    "oLanguage":
+    {
+        "sLengthMenu": "_MENU_ Registros por p&aacute;gina"
+    } ,
+
+});
+  })
+</script>
+{% endblock %}
+{% block content %}
+  {% if not ciclosPasados %}
+      <br>
+      <h2 class= "text-center"> No hay ciclos que hayan terminado </h2>
+  {% else %}
+
+    <table id="pagina" class='table w-100'>
+      <thead style="display:none">
+          <tr>
+              <th></th><th></th>
+          </tr>
+      </thead>
+      <tbody>
+        {% for ciclo in ciclosPasados %}
+        <tr >
+              <td style="	background-color:#5dbfcf;"><a href="{{ url_for('listar_talleresCiclo', id=ciclo['id']) }}" class="titulo">Ciclo de: {{ ciclo['fecha_ini'].strftime('%d-%m-%Y')}} hasta: {{ ciclo['fecha_fin'].strftime('%d-%m-%Y')}} </a></td>
+              <td style="background-color:#5dbfcf;">
+              <form action="{{url_for('eliminar_ciclo') }}" method="POST">
+                <input type="hidden" name="id" value="{{ ciclo ['id']}}">
+                {% if session['rol'] == 1 %}
+                  <button class="btn btn-primary float-right mt-1 mr-1" type="submit" onclick="return confirm('Estas seguro de borrar este ciclo?. Con él se borraran todos los alumnos,docentes y talleres asociados a este ciclo.')" title="Eliminar ciclo">
+                      <i class="fas fa-trash"></i>
+                  </button>
+                 {% endif %} 
+                </form>
+                </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+        {% endif %}
+    <br>
+    <div class="text-center">
+      <a class="btn btn-primary" href ="{{ url_for('ciclo_list') }}" role="button">Volver</a>
+    </div>
+
+
+{% endblock %}

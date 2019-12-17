@@ -1,0 +1,65 @@
+{% extends 'layout.html' %} {% block title %}Formulario Instrumento{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-danger" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form form action="{{ url_for('agregar_instrumento') }}" enctype="multipart/form-data" method="POST">
+    <fieldset>
+      <strong>
+        <legend>Agregar Instrumento</legend>
+      </strong>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Nombre</strong></label>
+        <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Tipo de Instrumento</strong></label>
+        <br>
+        <select name="tipo_id" required>
+          {% for result in tipo %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Número de Inventario</strong></label>
+        <input type="text" class="form-control" name="num_inventario" placeholder="Número de Inventario" required>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Foto</strong></label>
+        <br>
+      <input accept="image/*" type="file" name="imagen" id="imagen" required>
+  	</div>
+<!--      <div class="form-group">
+          <label for="exampleNombre"><strong>Foto</strong></label>
+          <input type="file" class="form-control-file" id="foto" name="foto">
+      </div> -->
+      <br>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+      <a class="btn btn-primary" href="{{ url_for('instrumentos_listado') }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+</div>
+<br>
+{% endblock %}

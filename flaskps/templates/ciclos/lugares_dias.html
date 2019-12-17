@@ -1,0 +1,103 @@
+{% extends 'layout.html' %} {% block title %}talleresCiclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+<!-- Los iconos tipo Solid de Fontawesome-->
+
+<!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- DATA TABLE -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+    var dataTable = $('#userList').DataTable({
+      "info": false,
+      "ordering": false,
+      "aLengthMenu": [[5, 10,20], [5, 10,20]],
+      "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+      }
+    })
+  })
+</script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category  }} alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="text-center" style="font-family: 'Anton', sans-serif;"> Lugares y dias del {{ nombreTaller[0]['nombre']}}  </h1>
+  {% if not cicloTerminado %}
+   {% if session['rol'] == 1 %}
+    <a class="btn btn-primary m-3" href="{{url_for('formAgregarDia_lugar',id=taller_id,ciclo_id = ciclo_id)}}">Agregar Lugar y día</a>
+   {% endif %}
+  {% endif %}
+  <table id="userList" class='table-responsive-xl w-100  table-striped table-bordered bg-white '>
+    <thead>
+      <tr>
+        <td style="text-align:center"><strong> Lugar y dia </strong> </td>
+        <td style="text-align:center"><strong> Dirección </strong> </td>
+        <td style="text-align:center"><strong> Telefono </strong> </td>
+       {% if session['rol'] == 1 %} 
+        <td style="text-align:center"><strong> Acciones </strong></td>
+       {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for dia_lugar in nucleos_dias %}
+      <tr>
+        <td >{{dia_lugar['nombre']}} - {{ dia_lugar ['dias_semana.nombre']}} </td>
+        <td >{{dia_lugar['direccion']}}</td>
+        <td >{{dia_lugar['telefono']}} </td>
+        {% if session['rol'] == 1 %}
+        <td>
+          <div class="container form-inline">
+            {% if not cicloTerminado %}
+              <form action="{{url_for('formDiaLugar') }}" method="POST">
+
+                <input type="hidden" name="taller_id" value="{{ taller_id }}">
+                <input type="hidden" name="ciclo_id" value="{{ ciclo_id }}">
+                <input type="hidden" name="nucleo_id" value="{{ dia_lugar['id']}}">
+                <input type="hidden" name="dia_id" value="{{ dia_lugar ['dias_semana.id']}}">
+                <button style="margin: 10px" class="btn btn-primary" type="submit" title="Modificar">
+                  <i class="fas fa-edit"></i>
+                </button>
+
+              </form>
+            {% endif %}
+
+            <form action="{{url_for('borrarDia_lugar') }}" method="POST">
+
+              <input type="hidden" name="taller_id" value="{{ taller_id }}">
+              <input type="hidden" name="ciclo_id" value="{{ ciclo_id }}">
+              <input type="hidden" name="nucleo_id" value="{{ dia_lugar['id']}}">
+              <input type="hidden" name="dia_id" value="{{ dia_lugar ['dias_semana.id']}}">
+              <button style="margin: 10px" class="btn btn-danger "onclick="return confirm('Estas seguro de borrar este dia y horario ?')" type="submit" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+
+            </form>
+          </div>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+<a class="btn btn-primary" href="{{ url_for('listar_talleresCiclo', id=ciclo_id) }}" role="button">Volver</a>
+</div>
+{% endblock %}

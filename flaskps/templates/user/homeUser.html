@@ -1,0 +1,43 @@
+{% extends 'layout.html' %} {% block title %}Seccion No admin{% endblock %}
+
+{% block content %}
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <div style="margin-left: -107px;">
+        <a class="navbar-logo">
+          <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo de la Orquesta" height="100">
+        </a> &nbsp&nbsp
+        <a class="navbar-brand">
+          <p class="text-white">{{titulo}}</p>
+        </a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+              aria-expanded="false">Operaciones</a>
+            <div class="dropdown-menu" x-placement="bottom-start"
+              style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+              <a class="dropdown-item" href="{{ url_for('docentes_listado') }}">Módulo Docentes</a>
+              <a class="dropdown-item" href="{{ url_for('estudiante_listado') }}">Módulo Estudiantes</a>
+              <a class="dropdown-item" href="{{ url_for('auth_logout') }}">Cerrar Sesion</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="float-right lead font-weight-bold">
+    <p style="font-size: 70%"> Usted está logueado como: {{ session ['user'] }} </p>
+  </div>
+  <br>
+  <div class="font-weight-bold text-center ">
+    <p>Bienvenido a su perfil!</p>
+    <div>
+</body>
+{% endblock %}

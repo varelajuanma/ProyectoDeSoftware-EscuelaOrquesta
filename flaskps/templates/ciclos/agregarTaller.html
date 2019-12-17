@@ -1,0 +1,69 @@
+{% extends 'layout.html' %} {% block title %}Modulo Ciclo{% endblock %}
+{% include "navbarLogueado.html" %}
+{% block head %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+{% block content %}
+<div class="text-center">
+<div class="container">
+  <form form action="{{ url_for('insert_taller') }}" method="POST">
+    <fieldset>
+      <strong>
+        <legend>Agregar Taller </legend>
+      </strong>
+      <div class="form-group">
+        <select name="idtaller" required>
+          {% for result in talleres %}
+          <option value="{{result['id']}}">{{result['nombre']}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <input hidden tipe="hidden" name="idciclo" value="{{idciclo[0]['id']}}">
+
+      <strong><legend>Asignar Docente</legend></strong>
+
+      <div class="form-group">
+        <div class="">
+          <select name="multiselect" multiple required>
+            {% for result in docentes %}
+            <option value="{{result['id']}}"> {{result['nombre']}} {{result['apellido']}} </option>
+            {% endfor %}
+          </select>
+        </div>
+        *Debe seleccionar al menos un docente responsable para el taller
+      </div>
+      <strong><legend>Asignar Núcleo</legend></strong>
+      <div class="form-group">
+        <select name="idnucleo" required>
+          {% for nucleo in nucleos %}
+            <option value="{{nucleo['id']}}"> {{ nucleo['nombre']}} </option>
+          {% endfor %}
+        </select>
+      </div>
+      <strong><legend>Asignar Día de la Semana </legend></strong>
+      <div class="form-group">
+        <select name="idDia" required>
+          {% for dia in dias %}
+            <option value="{{dia['id']}}"> {{ dia['nombre']}} </option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+      <a class="btn btn-primary" href="{{ url_for('listar_talleresCiclo' , id = idciclo[0]['id'] ) }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+</div>
+</div>
+{% endblock %}

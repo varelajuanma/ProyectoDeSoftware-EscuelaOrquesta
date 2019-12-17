@@ -1,0 +1,113 @@
+{% extends 'layout.html' %} {% block title %}Preceptor - Datos del Estudiante{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container">
+    <div style="margin-left: -107px;">
+      <a class="navbar-logo">
+        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo de la Orquesta" height="100">
+      </a> &nbsp&nbsp
+      <a class="navbar-brand">
+        <p class="text-white">{{titulo}}</p>
+      </a>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Operaciones</a>
+          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 37px, 0px);">
+            <a class="dropdown-item" href="{{ url_for('auth_logout') }}">Cerrar Sesion</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <fieldset>
+    <strong>
+      <legend>Datos del Estudiante</legend>
+    </strong>
+
+    <div class="form-group">
+      <label for="exampleInputEmail1"><strong>Apellido</strong></label>
+      <input type="text" class="form-control" name="apellido" aria-describedby="emailHelp" value="{{estudianteUpdate[0]['apellido']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Nombre</strong></label>
+      <input type="text" class="form-control" name="nombre" value="{{estudianteUpdate[0]['nombre']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Fecha de Nacimiento</strong></label>
+      <input type="date" class="form-control" name="fecha_nac" value="{{estudianteUpdate[0]['fecha_nac']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Lugar De Nacimiento</strong></label>
+      <input type="text" class="form-control" name="lugarnac" value="{{estudianteUpdate[0]['lugarnac']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group"></div>
+    <label for="exampleNombre"><strong>Localidad</strong></label>
+    <input type="text" class="form-control" name="localidad" value="{{aux_localidad['nombre']}}" readonly="readonly">
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Domicilio</strong></label>
+      <input type="text" class="form-control" name="domicilio" value="{{estudianteUpdate[0]['domicilio']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Barrio</strong></label>
+      <input type="text" class="form-control" name="barrio_id" value="{{idbarrio[0]['barrio']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Genero</strong></label>
+      <input type="text" class="form-control" name="genero_id" value="{{idgenero[0]['genero']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group"></div>
+    <label for="exampleNombre"><strong>Tipo De Documento</strong></label>
+    <input type="text" class="form-control" name="localidad" value="{{aux_tipodoc['nombre']}}" readonly="readonly">
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Numero de Documento</strong></label>
+      <input type="number" class="form-control" name="numero" value="{{estudianteUpdate[0]['numero']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Teléfono</strong></label>
+      <input type="text" class="form-control" name="tel" value="{{estudianteUpdate[0]['tel']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Escuela</strong></label>
+      <input type="text" class="form-control" name="escuela_id" value="{{idescuela[0]['escuela']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Nivel</strong></label>
+      <input type="text" class="form-control" name="nivel_id" value="{{idnivel[0]['nivel']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Mail De Responsable</strong></label>
+      <input type="text" class="form-control" name="mailresponsable" value="{{estudianteUpdate[0]['mailresponsable']}}" readonly="readonly">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleNombre"><strong>Numero De Responsable</strong></label>
+      <input type="number" class="form-control" name="numeroresponsable" value="{{estudianteUpdate[0]['numeroresponsable']}}" readonly="readonly">
+    </div>
+
+  </fieldset>
+  <a class="btn btn-primary" href="{{url_for('listarEstudiantesParaPreceptor') }}" role="button">Volver</a>
+</div>
+
+<br>
+{% endblock %}

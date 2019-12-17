@@ -1,0 +1,49 @@
+{% extends 'layout.html' %} {% block title %}Formulario de Modificación de Instrumento{% endblock %}
+{% include "navbarLogueado.html" %}
+
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-danger" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form action="{{url_for('modificar_foto') }}" enctype="multipart/form-data" method="POST">
+    <fieldset>
+      <strong>
+        <legend>Modificar la foto del Instrumento</legend>
+      </strong>
+      <br>
+      <h5 class="col-md-4 text-center">FOTO ACTUAL</h5>
+      <img class="image-size" src="data:image/jpeg;base64,{{imagen}}">
+      <input type="hidden" name="id" value="{{instrumentoUpdate['id']}}">
+      <input accept="image/*" type="file" name="imagen" id="imagen" required>
+
+
+      <!-- <input type="hidden" name="id" value="{{instrumentoUpdate['id']}}"> -->
+      <br>
+      <button type="submit" class="btn btn-primary">Modificar Foto</button>
+      
+    </fieldset>
+  </form>
+  <form class="text-center" action="{{url_for('modificar_instrumento') }}" method="POST">
+        <input type="hidden" name="id" value="{{instrumentoUpdate['id']}}">
+        <button style="margin: 10px" class="btn btn-primary" type="submit">
+                Volver
+        </button>
+      </form>
+</div>
+<br>
+{% endblock %}

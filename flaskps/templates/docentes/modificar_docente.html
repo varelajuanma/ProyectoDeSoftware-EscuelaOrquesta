@@ -1,0 +1,101 @@
+{% extends 'layout.html' %} {% block title %}Modulo Docentes{% endblock %}
+{% include "navbarLogueado.html" %}
+
+<!-- BLOQUE DE MENSAJE DE ALERT TIPO FLASH -->
+{% block message %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <div class="alert alert-dismissible alert-success" role="alert">
+    <strong>{{ message }}</strong>
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form form action="{{ url_for('modificar_docente') }}" method="POST">
+    <fieldset>
+      <br>
+      <strong>
+        <legend>Modificar Docente</legend>
+      </strong>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Apellido</strong></label>
+        <input type="text" class="form-control" name="apellido" value="{{docente['apellido']}}" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Nombre</strong></label>
+        <input type="text" class="form-control" name="nombre" value="{{docente['nombre']}}" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Fecha De Nacimiento</strong></label>
+        <input type="date" class="form-control" name="fecha" max="2015-12-31" min="1920-01-01" value="{{docente['fecha_nac']}}" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Localidad</strong></label>
+        <br>
+        <select name="localidad">
+            <option value="{{localidadActual['id']}}" selected="selected">{{localidadActual['nombre']}}</option>
+            {% for localidad in localidadesList %}
+                {% if localidad['nombre'] != localidadActual['nombre'] %}
+                    <option value="{{localidad['id']}}">{{localidad['nombre']}}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Domicilio</strong></label>
+        <input type="text" class="form-control" name="Domicilio" value="{{docente['domicilio']}}" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Genero</strong></label>
+        <br>
+        <select name="genero">
+          <option value="{{docente['genero_id']}}" selected="selected">{{docente.genero}}</option>
+          {% for genero in generosList %}
+            {% if genero['id'] != docente['genero_id'] %}
+                <option value="{{genero['id']}}">{{genero['nombre']}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Tipo De Documento</strong></label>
+        <br>
+        <select name="tipodoc">
+                <option value="{{docente['tipo_doc_id']}}" selected="selected">{{tipo_documento_actual['nombre']}}</option>
+          {% for tipo in tiposDocumentoList %}
+            {% if tipo['nombre'] != tipo_documento_actual['nombre'] %}
+
+                <option value="{{tipo['id']}}">{{tipo['nombre']}}</option>
+
+            {% endif %}
+          {% endfor %}
+
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Número De Documento</strong></label>
+        <input type="number" class="form-control" name="doc" value="{{docente['numero']}}" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleNombre"><strong>*Número De Teléfono</strong></label>
+        <input type="number" class="form-control" name="tel" value="{{docente['tel']}}" required>
+        <input type="hidden" name="id" value="{{docente['id']}}">
+      </div>
+      <button type="submit" class="btn btn-primary">Modificar</button>
+      <a class="btn btn-primary" href="{{ url_for('docentes_listado') }}" role="button">Volver</a>
+    </fieldset>
+  </form>
+</div>
+<br>
+
+{% endblock %}
